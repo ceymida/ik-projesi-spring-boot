@@ -30,4 +30,11 @@ public class CalisanController {
         // Dışarıdan gelen JSON verisini Java nesnesine (Calisan) çevirip Service'e gönderiyoruz
         return calisanService.calisanKaydet(calisan);
     }
+    @PutMapping("/{id}") // Burada başında / olduğuna ve süslü paranteze dikkat!
+    public Calisan calisanGuncelle(@PathVariable Long id, @RequestBody Calisan guncelBilgiler) {
+        return calisanService.calisanGuncelle(id, guncelBilgiler);
+    }
+
+    @DeleteMapping("/{id}") // Burada da aynı şekilde
+    public void calisanSil(@PathVariable Long id) { calisanService.calisanSil(id); }
 }

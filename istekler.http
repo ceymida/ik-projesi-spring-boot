@@ -1,0 +1,36 @@
+### 1. Tüm Çalışanları Getir (Okuma - GET)
+GET http://localhost:8080/api/calisanlar
+Accept: application/json
+
+### 2. Kurallara Uygun Yeni Çalışan Ekle (Oluşturma - POST)
+POST http://localhost:8080/api/calisanlar
+Content-Type: application/json
+
+{
+  "ad": "Zeynep",
+  "soyad": "Kaya",
+  "maas": 55000.0
+}
+
+### 3. Hatalı Çalışan Ekle (Maaş Kuralı İhlali - POST)
+POST http://localhost:8080/api/calisanlar
+Content-Type: application/json
+
+{
+  "ad": "Uyanık",
+  "soyad": "Personel",
+  "maas": 10000.0
+}
+
+### 4. ID'si 1 Olan Çalışanı Güncelle (Zam Yapma - PUT)
+PUT http://localhost:8080/api/calisanlar/1
+Content-Type: application/json
+
+{
+  "ad": "Ahmet",
+  "soyad": "Yilmaz",
+  "maas": 95000.0
+}
+
+### 5. ID'si 3 Olan Çalışanı Sil (İşten Çıkarma - DELETE)
+DELETE http://localhost:8080/api/calisanlar/3
