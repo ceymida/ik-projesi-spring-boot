@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>İzin Yönetimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <!-- ÜST KISIM: Başlık ve Geri Dönüş Butonu -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-info">
+            <span th:text="${calisan.ad} + ' ' + ${calisan.soyad}"></span> - İzin Paneli
+        </h2>
+        <a href="/calisanlar" class="btn btn-secondary">Çalışan Listesine Dön</a>
+    </div>
+
+    <!-- İZİN EKLEME FORMU -->
+    <div class="card shadow border-info mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Yeni İzin Talebi Oluştur</h5>
+        </div>
+        <div class="card-body">
+            <!-- calisanId'yi JavaScript'e aktarmak için gizli (hidden) bir input kullanıyoruz -->
+            <input type="hidden" id="calisanId" th:value="${calisan.id}">
+
+            <form id="yeniIzinFormu">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">İzin Türü</label>
+                        <select class="form-select" id="izinTuru" required>
+                            <option value="Yıllık İzin">Yıllık İzin</option>
+                            <option value="Mazeret İzni">Mazeret İzni</option>
+                            <option value="Hastalık Raporu">Hastalık Raporu</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Başlangıç Tarihi</label>
+                        <input type="date" class="form-control" id="baslangicTarihi" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Bitiş Tarihi</label>
+                        <input type="date" class="form-control" id="bitisTarihi" required>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success w-100">İzni Kaydet</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GEÇMİŞ İZİNLER TABLOSU -->
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title text-secondary">Kullanılan İzinler Listesi</h5>
+            <table class="table table-hover table-bordered align-middle mt-3">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>İzin Türü</th>
+                    <th>Başlangıç Tarihi</th>
+                    <th>Bitiş Tarihi</th>
+                    <th>Durum</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Eğer çalışanın hiç izni yoksa bu satır görünür -->
+                <tr th:if="${#lists.isEmpty(calisan.izinler)}">
+                    <td colspan="5" class="text-center text-muted">Henüz kaydedilmiş bir izin bulunmuyor.</td>
+                </tr>
+
+                <!-- İzinleri döngüyle listeliyoruz -->
+                <tr th:each="izin : ${calisan.izinler}">
+                    <td th:text="${izin.id}">1</td>
+                    <td th:text="${izin.izinTuru}">Yıllık İzin</td>
+                    <td th:text="${izin.baslangicTarihi}">2026-10-01</td>
+                    <td th:text="${izin.bitisTarihi}">2026-10-05</td>
+                    <td>
+                        <span class="badge bg-warning text-dark" th:text="${izin.onayDurumu}">Onay Bekliyor</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JAVASCRIPT: API ile İzin Kaydetme İsteği -->
+<script>
+    document.getElementById('yeniIzinFormu').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Gizli input'tan ID'yi alıyoruz
+        const cId = document.getElementById('calisanId').value;
+
+        const izinData = {
+            izinTuru: document.getElementById('izinTuru').value,
+            baslangicTarihi: document.getElementById('baslangicTarihi').value,
+            bitisTarihi: document.getElementById('bitisTarihi').value
+        };
+
+        // Daha önce CalisanController'da yazdığımız POST adresine JSON gönderiyoruz
+        fetch(`/api/calisanlar/${cId}/izinler`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(izinData)
+        })
+            .then(response => {
+                if(response.ok) {
+                    alert("İzin başarıyla kaydedildi!");
+                    window.location.reload(); // Değişiklikleri görmek için sayfayı yenile
+                } else {
+                    alert("İzin eklenirken bir hata oluştu.");
+                }
+            })
+            .catch(error => console.error('Hata:', error));
+    });
+</script>
+
+</body>
+</html>

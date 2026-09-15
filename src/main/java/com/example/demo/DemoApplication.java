@@ -35,19 +35,19 @@ public class DemoApplication {
         return args -> {
             System.out.println("--- SERVİS KATMANI TESTİ BAŞLIYOR ---");
 
-            try {
-                // TEST 1: Geçerli bir çalışan ekle
-                Calisan c1 = new Calisan("Mehmet", "Öz", 25000.0);
-                calisanService.calisanKaydet(c1);
-                System.out.println("Başarılı: Mehmet eklendi.");
-
-                // TEST 2: Hatalı (Düşük Maaşlı) bir çalışan ekle
-                Calisan c2 = new Calisan("Hatalı", "Veri", 5000.0);
-                calisanService.calisanKaydet(c2); // Burada program durup hataya düşecek
-
-            } catch (Exception e) {
-                System.out.println("Yakaladığımız Hata: " + e.getMessage());
-            }
+//            try {
+//                // TEST 1: Geçerli bir çalışan ekle
+//                Calisan c1 = new Calisan("Mehmet", "Öz", 25000.0);
+//                calisanService.calisanKaydet(c1);
+//                System.out.println("Başarılı: Mehmet eklendi.");
+//
+//                // TEST 2: Hatalı (Düşük Maaşlı) bir çalışan ekle
+//                Calisan c2 = new Calisan("Hatalı", "Veri", 5000.0);
+//                calisanService.calisanKaydet(c2); // Burada program durup hataya düşecek
+//
+//            } catch (Exception e) {
+//                System.out.println("Yakaladığımız Hata: " + e.getMessage());
+//            }
 
             // TEST 3: Listeleme
             System.out.println("\nGüncel Çalışan Listesi:");
